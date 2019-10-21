@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Open Platform Demo APP</title>
+<style>
+	* {
+		margin: 0;
+		padding: 0;	
+	}
+	/*.content {
+		margin: 20px auto 0;
+		width: 500px;
+		padding: 5px 40px;
+		border: 1px solid #dfdfdf;
+	}*/
+	.platformtitle {
+		margin: 10px 0;
+	}
+	h1 {
+		text-align: left;
+  		color: #656565;
+	}
+	#liveview {
+		width: 352px;
+		height: 288px;
+		margin: 0;
+		background: #343434;
+		/*border: 1px solid #000000;*/
+	}
+	
+	.drawButtons {
+		margin: 10px auto;
+  		padding: 0 15px;
+	}
+	
+	.drawButtons input {
+		background-image: none;
+		background-color: #ffffff;
+		padding: 4px 8px;
+		margin: 0 10px 0 0;
+		line-height: normal;
+		border: 1px solid #8C8C8C;
+		cursor: pointer;
+		border-radius: 2px;
+		display: inline-block;
+		text-align: center;
+		white-space: nowrap;
+		cursor: pointer;
+		-webkit-user-select: none;
+		width: 100px;
+	}
+	.videoShield {
+		position: absolute;
+		margin: 0 auto;
+		background-color: transparent;
+	}
+	.liveviewBlock {
+		position: absolute;
+		width: 0;
+  		height: 0;
+	}
+	#liveviewCanvas {
+		background-color: transparent;
+		border: none;
+		position: relative;
+		width: 352px;
+		height: 288px;
+		bottom: 288px;
+	}
+	.liveviewShadow {
+		border: none;
+		position: relative;
+		width: 352px;
+		height: 288px;
+		bottom: 288px;
+		/*IE8 bug, need transparents image to prevent click event*/
+		background: url(transparent.png);
+	}	
+	.params {
+		margin: 10px auto;
+		padding: 10px;
+	}
+	.params div {
+		margin: 20px 0;
+	}
+	.params span {
+		width: 75px;
+		display: inline-block;
+	}
+	.params input {
+		width: 240px;
+	}
+	.save input {
+		padding: 7px 8px;
+		width: 165px;
+		border: 0;
+		border-radius: 2px;
+		text-align: center;
+		white-space: nowrap;
+		cursor: pointer;
+		-webkit-user-select: none;
+		color: #ffffff;
+		background-color: #d71920;
+		cursor:pointer;
+	}
+</style>
+<script src="script/jquery-1.11.1.js"></script>
+<script src="script/main.js"></script>
+<script src="script/excanvas.js"></script>
+</head>
+<body>
+<div class="content">
+	<div class="platformtitle">
+    	<h1>HEOP WEB DEMO APP</h1>
+    </div>
+    <div id="liveview">
+    </div>
+    <div class="videoShield">
+        <div class="liveviewBlock">
+        	<iframe id="liveviewShadow" class="liveviewShadow" src="transparent.html" frameborder="0" scrolling="no" allowtransparency="true"></iframe>
+        </div>
+        <div class="liveviewBlock">
+            <canvas id="liveviewCanvas" width="352" height="288"></canvas>
+        </div>
+    </div>
+    <div class="drawButtons">
+        <span><input type="button" id="drawBtn" value="Start Draw" onclick="demoInterface.draw()" /></span>
+        <span><input type="button" value="Clear" onclick="demoInterface.clearRect()" /></span>
+    </div>
+    <div class="params">
+        <div>
+            <span>Test1</span>
+            <input type="text" id="Test1" />
+        </div>
+        <div>
+            <span>Test2</span>
+            <input type="text" id="Test2" />
+        </div>
+        <div>
+            <span>Test3</span>
+            <input type="text" id="Test3" />
+        </div>
+        <div>
+            <span>Test4</span>
+            <input type="text" id="Test4" />
+        </div>
+    </div>
+    <div class="save">
+        <input type="button" value="Save" onClick="demoInterface.setParam()" />
+    </div>
+</div>
+</body>
+</html>

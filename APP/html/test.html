@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>canvas</title>
+<style>
+</style>
+
+<!--[if lte IE 9]>
+<script src="html5shiv.js"></script>
+<script src="script/excanvas.js"></script>
+<script src="script/jquery-1.11.1.js"></script>
+<!--[if gt IE 9]><!-->
+<script src="../jquery-2.1.0.min.js"></script>
+<![endif]-->
+</head>
+
+<body>
+<canvas id="pie" width="100" height="100" data-ratio="0.65_0.15_0.20" ></canvas>
+<canvas class="doughnut" width="100" height="100" data-ratio="0.66_0.34"></canvas>
+<script>
+(function($){
+$.fn.extend({
+    pieChart: function(o){
+            this.each(function(m, n){
+                var target = $(n),
+                    ratio = target.data('ratio').split('_'),
+                    colors = o.colors,
+                    ctx = n.getContext('2d'),
+                    center = Math.floor(target.height()/2),    //圆心
+                    radius = center - (o.borderWidth || 0),                    //半径
+                    startAngle = Math.PI * 1.5,                             //起始弧度
+                    endAngle = Math.PI * 1.5;     //结束弧度
+               
+                ctx.fillStyle = o.borderCorlor || '#ffffff';
+                ctx.arc(center, center, center, 0, Math.PI * 2, true);
+                ctx.fill();
+
+                $.each(ratio, function(i, v){
+                    endAngle = endAngle - v * Math.PI * 2; //结束弧度
+                    ctx.fillStyle = colors[i];
+                    ctx.beginPath();
+
+                    ctx.moveTo(center, center);                     //移动到到圆心
+                    ctx.arc(center, center, radius, startAngle, endAngle, true);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                    if(o.stroke){
+                        ctx.strokeStyle = o.stroke.color || '#ffffff';
+                        ctx.lineWidth =  o.stroke.width || 1;
+                        ctx.stroke();
+                    }
+                    startAngle = endAngle;                     //设置起始弧度
+                });
+            });    
+
+        },
+
+        doughnutChart: function(o){
+            this.each(function(m, n){
+                var target = $(n),
+                    ratio = target.data('ratio').split('_'),
+                    colors = o.colors,
+                    ctx = n.getContext('2d'),
+                    center = Math.floor(target.height()/2),    
+                    radius = center,
+                    startAngle = Math.PI * 1.5,
+                    endAngle = Math.PI * 1.5;
+
+                $.each(ratio, function(i, v){
+                    //弧度 = 角度 * Math.PI / 180 
+                    //v*360*Math.PI/180 =  v * Math.PI * 2
+                    endAngle = endAngle - v * Math.PI * 2;
+                    ctx.fillStyle = colors[i];
+                    ctx.beginPath();
+
+                    ctx.moveTo(center, center);
+                    ctx.arc(center, center, radius, startAngle, endAngle, true);
+                    ctx.closePath();
+                    ctx.fill();
+                    startAngle = endAngle;
+                });
+
+                ctx.fillStyle = o.centerColor;
+                ctx.beginPath();
+                ctx.arc(center, center, radius-o.borderWidth, 0, Math.PI * 2, true);
+                ctx.fill();
+            });
+        }
+});
+
+$(window).on('load', function(){
+    $('#pie').pieChart({
+        colors: ['#7cb228', '#abd667', '#ededed'],
+        borderWidth: 2,
+        borderCorlor: '#7cb228'
+        // stroke: {
+        //     color: '#ff0000',
+        //     width: 2
+        // }
+    });
+
+    $('.doughnut').doughnutChart({
+        colors: ['#7cb228', '#ededed'],
+        centerColor: '#ffffff',
+        borderWidth: 10
+    });
+});
+})(jQuery);
+        
+
+</script>
+</body>
+</html>

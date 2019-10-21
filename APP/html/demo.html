@@ -1,0 +1,130 @@
+<ul id="demo" class="demoTabs">
+    <li>
+        <a href="javascript:;">Settins</a>
+    </li>
+    <li>
+        <a href="javascript:;">About</a>
+    </li>
+</ul>
+<div class="clear"></div>
+<div class="panes">
+    <iframe id="demoSetting" src="" frameborder="0">
+    </iframe>
+</div>
+<style>
+	#demoSetting{
+		width: 100%;
+	}
+	.panes {
+		border-top: 1px solid #C8C8C8;
+	}
+	.demoTabs li {
+		list-style: none;
+		display: inline-block;
+  		float: left;
+	}
+	.demoTabs a {
+		margin-top: -2px;
+		color: #CA2C32;
+		padding: .5em 1em;
+		text-decoration: none;
+		outline: 0;
+		display: inline-block;
+		font-weight: bold;
+	}
+	.demoTabs a.current {
+		border-bottom: 2px solid #CA2C32;
+	}
+</style>
+<script>
+(function(){
+	$("#demo a").eq(0).unbind().bind("click", function(){
+		demoSetting(this);
+	});
+	$("#demo a").eq(1).unbind().bind("click", function(){
+		demoAbout(this);
+	});
+	//get the app path	
+	//get path from <input type="hidden" name="appurl" data="" />
+	var demoPath = $(":hidden[name=appurl]").attr("data");
+	
+	//trigger the first tab
+	demoSetting($("#demo a").get(0));
+	
+	//use this function to fix the page size
+	//autoResizeIframe();
+	
+	//setting page
+	function demoSetting(element) {
+		if(!$(element).hasClass("current")) {
+			$("#demo").find("a").removeClass("current");
+			$(element).addClass("current");
+			$("#demoSetting").unbind().bind("load", function(){
+				setContentHeight(document.getElementById("demoSetting"));
+			});
+			$("#demoSetting").attr("src", '/' + demoPath + 'index.html');
+		}
+	}
+	
+	//version info page
+	function demoAbout(element) {
+		if(!$(element).hasClass("current")) {
+			$("#demo").find("a").removeClass("current");
+			$(element).addClass("current");
+			$("#demoSetting").unbind().bind("load", function(){
+				setContentHeight(document.getElementById("demoSetting"));
+			});
+			$("#demoSetting").attr("src", '/' + demoPath + 'about.html');
+		}
+	}
+	
+	//fix the iframe and content height
+	function setContentHeight(element) { 
+		var content = element;
+		//broswer
+		if (document.getElementById) {
+			if (content && !window.opera) { 
+				if (content.contentDocument && content.contentDocument.body.offsetHeight) { //non ie
+					content.height = content.contentDocument.body.offsetHeight + 20;
+				} else if(content.Document && content.Document.body.scrollHeight) { //ie
+					content.height = content.Document.body.scrollHeight + 10;
+				}
+			} else {
+				//opeara 
+				if(content.contentWindow.document && content.contentWindow.document.body.scrollHeight) {
+					content.height = content.contentWindow.document.body.scrollHeight;//Opera 
+				} 
+			} 
+		}
+		//fix the content height
+		//autoResizeIframe();
+	}
+	
+	//return the string type of user session, which format as username:sessionId.
+	function getUserSession() {
+		//get path from <input type="hidden" name="usersession" data="" />
+		var userAuth = $(":hidden[name=usersession]").attr("data");
+		return userAuth;
+	}
+	
+	//return the string type of user auth, which format as username:password. it can return a base64 encode string when set the parammeter
+	function getUserAuth(bBase64Type) {
+		/*var userAuth = Base64.decode(g_oWebSession.getItem("userInfo"));
+		userAuth = userAuth.replace(/^:/, '');*/
+		
+		//get path from <input type="hidden" name="userauth" data="" />
+		var userAuth = $(":hidden[name=userauth]").attr("data");
+		
+		//please implement Base64 encode, decode by yourself if needed
+		if(!(Base64 && Base64.encode)) {
+			var Base64 = {};
+			Base64.encode = function(szAuth){
+				return szAuth;
+			}
+		}
+		return userAuth ? (bBase64Type ? Base64.encode(userAuth) : userAuth)  : '';
+	}
+	window.getUserSession = getUserSession;
+	window.getUserAuth = getUserAuth;
+})()
+</script>
